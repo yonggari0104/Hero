@@ -4,6 +4,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import warnings
 warnings.filterwarnings('ignore')
+import plotly.offline as py
+color = sns.color_palette()
+import plotly.graph_objs as go
+py.init_notebook_mode(connected=True)
+from plotly.offline import plot
 
 
 
@@ -105,6 +110,26 @@ plt.title('Gender count - Marvel Comics')
 #BAR GRAPH OF GENDER COUNT FOR DC HEROES
 sns.countplot(info['Gender'][info['Publisher']=='DC Comics'])
 plt.title('Gender Count - DC comics')
+
+
+#BAR GRAPH OF MALE/FEMALE SUPERHEROS
+info_gender = info['Gender'].value_counts().head()
+trace = go.Bar(
+    y=info_gender.index[::-1],
+    x=info_gender.values[::-1],
+    orientation = 'h',
+    marker=dict(
+        color=info_gender.values[::-1]
+    ),
+)
+
+layout = dict(
+    title='Gender Distribution of Superheroes',
+    )
+data = [trace]
+fig = go.Figure(data=data, layout=layout)
+py.iplot(fig, filename="Superheroes")
+plot(fig)
 #%%
 
 #POWER BREAKDOWN
@@ -171,6 +196,7 @@ for item in f.get_xticklabels():
     
 #PRINTS HOW MANY CAN FLY
 print(len(power[(power['Flight'] == 1)]))
+
 
 
 
